@@ -296,7 +296,7 @@ GameObject:
   - component: {fileID: 4294627020485002611}
   - component: {fileID: 4294627020485002608}
   - component: {fileID: 4294627020485002609}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -407,6 +407,7 @@ MonoBehaviour:
   explosive: {fileID: 4401579205848167113, guid: 0cf211a206ed7934b8c72700f63e13ea,
     type: 3}
   gunLine: {fileID: 4294627018631790721}
+  invulnerable: 0
   state: 0
   actions: 1
   startingActions: 1

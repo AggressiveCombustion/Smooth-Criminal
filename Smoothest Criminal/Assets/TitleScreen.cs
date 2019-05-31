@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class TitleScreen : MonoBehaviour
 {
+    public GameObject devText;
+    public GameObject titleText;
     // Start is called before the first frame update
     void Start()
     {
@@ -13,6 +15,9 @@ public class TitleScreen : MonoBehaviour
         Timer t2 = new Timer(2.5f, FindObjectOfType<SceneTransitions>().End);
         GameManager.instance.AddTimer(t2, gameObject);
 
+        Timer tt1 = new Timer(3.5f, Toggle);
+        GameManager.instance.AddTimer(tt1, gameObject);
+
         Timer t3 = new Timer(3.5f, FindObjectOfType<SceneTransitions>().Begin);
         GameManager.instance.AddTimer(t3, gameObject);
     }
@@ -21,5 +26,11 @@ public class TitleScreen : MonoBehaviour
     void Update()
     {
         
+    }
+
+    void Toggle()
+    {
+        devText.SetActive(!devText.active);
+        titleText.SetActive(!titleText.active);
     }
 }

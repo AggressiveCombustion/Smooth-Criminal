@@ -185,12 +185,12 @@ public class PlayerController : PhysicsObject
 
         h_input = Input.GetAxis("Horizontal");
         doJump = Input.GetButton("Jump");
-        //doKick = Input.GetButtonDown("Dash");
+        doKick = Input.GetButtonDown("Dash");
         doShoot = Input.GetButtonDown("Fire1");
 
         Debug.Log(h_input);
         
-        doDash = Input.GetButtonDown("Dash");
+        //doDash = Input.GetButtonDown("Dash");
         //doPlaceExplosive = Input.GetButtonDown("Fire1");
         //doDetonate = Input.GetButtonDown("Fire2");
         doSword = Input.GetButton("Fire2");

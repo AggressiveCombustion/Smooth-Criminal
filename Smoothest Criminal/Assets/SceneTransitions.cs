@@ -5,6 +5,9 @@ using UnityEngine;
 public class SceneTransitions : MonoBehaviour
 {
     public Animator anim;
+
+    public AudioClip swoosh;
+
     // Start is called before the first frame update
     void Start()
     {
