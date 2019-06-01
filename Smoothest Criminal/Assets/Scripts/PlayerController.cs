@@ -507,7 +507,8 @@ public class PlayerController : PhysicsObject
 
         foreach (Enemy e in FindObjectsOfType<Enemy>())
         {
-            if(Vector2.Distance(transform.position, e.transform.position) < distanceToNearest)
+            if(Vector2.Distance(transform.position, e.transform.position) < distanceToNearest &&
+                e.state != Enemy.EnemyState.dead)
             {
                 distanceToNearest = Vector2.Distance(transform.position, e.transform.position);
                 closestEnemy = e;

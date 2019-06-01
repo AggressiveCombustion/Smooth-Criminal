@@ -16,6 +16,7 @@ public class Enemy : PhysicsObject
     bool startingStationary;
     int startingDir;
     public bool startingPatrol;
+    public int startingPatrolIndex;
     private Vector2 startingSize;
     private Vector2 startingBoxOffset;
     bool stunned = false;
@@ -59,6 +60,9 @@ public class Enemy : PhysicsObject
 
     public GameObject indicator;
 
+    public GameObject gunIndicator;
+    public GameObject swordIndicator;
+
     public bool target = false;
 
     public enum EnemyState
@@ -78,6 +82,19 @@ public class Enemy : PhysicsObject
     // Start is called before the first frame update
     void Start()
     {
+        if (ranged)
+        {
+            indicator = gunIndicator;
+            swordIndicator.SetActive(false);
+        }
+
+        else
+        {
+            indicator = swordIndicator;
+            gunIndicator.SetActive(false);
+        }
+
+        
         SaveOriginalValues();
     }
 
@@ -89,6 +106,7 @@ public class Enemy : PhysicsObject
         startingDir = facing;
         startingPatrol = patrol;
         startingSize = GetComponent<BoxCollider2D>().size;
+        startingPatrolIndex = patrolIndex;
         startingBoxOffset = GetComponent<BoxCollider2D>().offset;
     }
 
@@ -123,6 +141,7 @@ public class Enemy : PhysicsObject
 
         hitDirection = Vector2.zero;
         patrol = startingPatrol;
+        patrolIndex = startingPatrolIndex;
     }
 
     // Update is called once per frame
@@ -318,7 +337,6 @@ public class Enemy : PhysicsObject
 
             if (Vector2.Distance(transform.position, suspiciousPoint) < nodeDistance)
             {
-                Debug.Log("Reached suspicious point");
                 move.x = 0;
                 anim.SetBool("running", false);
                 elapsedNodeTime += Time.deltaTime * GameManager.instance.speed;

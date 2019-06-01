@@ -210,7 +210,10 @@ public class MainMenu : MonoBehaviour
                 if (FindObjectOfType<SceneTransitions>() != null)
                     FindObjectOfType<SceneTransitions>().End();
                 // fade out, then load scene
-                DelayAction(StartGame, 2);
+                DelayAction(StartGame, 1);
+                //MusicManager.instance.FadeOut();
+                //Timer t = new Timer(1.0f, MusicManager.instance.StartBattleMusic);
+                //GameManager.instance.AddTimer(t, MusicManager.instance.gameObject);
                 break;
             // music toggle
             case 1:
@@ -258,7 +261,7 @@ public class MainMenu : MonoBehaviour
 
     void StartGame()
     {
-        SceneManager.LoadScene(2);
+        SceneManager.LoadScene(1);
     }
 
     void GoToCredits()

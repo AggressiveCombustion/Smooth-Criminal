@@ -9,9 +9,6 @@ EditorBuildSettings:
     path: Assets/Scenes/title.unity
     guid: 9b489cc076d77164583b3dbcab6d3319
   - enabled: 1
-    path: Assets/Scenes/Levels/0-1_origin_story.unity
-    guid: 92ff0feaca168174a97ed0c7731c15ef
-  - enabled: 1
     path: Assets/Scenes/Levels/0-2_jump_around.unity
     guid: c8cb9bf8130f21841a9c0b92796974ed
   - enabled: 1
@@ -24,23 +21,32 @@ EditorBuildSettings:
     path: Assets/Scenes/Levels/0-11_hanging_out.unity
     guid: 93748b30c435cc048818db1946be9abc
   - enabled: 1
-    path: Assets/Scenes/Levels/0-9_trust_fall.unity
-    guid: 9a7bbcf15cd3e6d498a6e718bd342423
-  - enabled: 1
-    path: Assets/Scenes/Levels/0-3_draw.unity
-    guid: 066c1fcb972ba9247aaf176bdab51a77
-  - enabled: 1
     path: Assets/Scenes/Levels/0-4_look_over_here.unity
     guid: 5de0fd46daea29043b3b8b534ab9e5f6
   - enabled: 1
     path: Assets/Scenes/Levels/0-8_roll_with_it.unity
     guid: 17b42c28bda2f2743801ef67c8a770ec
   - enabled: 1
+    path: Assets/Scenes/Levels/0-12_sword_to_a_gun_fight.unity
+    guid: 623f4b5a5951a2b4d8a597ec9c571189
+  - enabled: 1
+    path: Assets/Scenes/Levels/0-13_gun_to_a_sword_fight.unity
+    guid: 17b967f895654d646b8a940ced043d18
+  - enabled: 1
+    path: Assets/Scenes/Levels/0-9_trust_fall.unity
+    guid: 9a7bbcf15cd3e6d498a6e718bd342423
+  - enabled: 1
+    path: Assets/Scenes/Levels/0-3_draw.unity
+    guid: 066c1fcb972ba9247aaf176bdab51a77
+  - enabled: 1
     path: Assets/Scenes/Levels/0-5_hurdles.unity
     guid: ad38b9e9abaa5bb4f8f7d91a77d07d0f
   - enabled: 1
     path: Assets/Scenes/Levels/0-10_paint_the_town_red.unity
     guid: 8afb9440e3a05c543ba74bd50bbf9b22
+  - enabled: 1
+    path: Assets/Scenes/Levels/0-14_war_and_peace.unity
+    guid: 6aa536f08d811ff438c1e13964e3cf70
   - enabled: 1
     path: Assets/Scenes/credits.unity
     guid: e650adef7ccf1ed43aa025b52cf60947

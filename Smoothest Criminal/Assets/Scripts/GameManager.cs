@@ -177,6 +177,8 @@ public class Timer
         {
             GameManager.instance.registry.Remove(id);
         }
+
+        
     }
 
     void MakeRandomID()

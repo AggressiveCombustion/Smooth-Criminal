@@ -350,6 +350,7 @@ MonoBehaviour:
   minGroundNormalY: 0.65
   sight: {fileID: 5606077213626304969}
   facing: 1
+  startingPatrol: 0
   stationary: 0
   maxSpeed: 1
   anim: {fileID: 5606077213626304983}
@@ -381,6 +382,9 @@ MonoBehaviour:
   gunLine: {fileID: 5606077215514222569}
   spawned: 0
   indicator: {fileID: 5606077215552817128}
+  gunIndicator: {fileID: 5606077215552817128}
+  swordIndicator: {fileID: 8803996837993499253}
+  target: 0
   state: 0
 --- !u!61 &5606077213997926983
 BoxCollider2D:

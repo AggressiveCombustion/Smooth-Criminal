@@ -349,7 +349,7 @@ PrefabInstance:
     - target: {fileID: 9151435085624405074, guid: 882446caed2733540b1d56e9656e9b50,
         type: 3}
       propertyPath: maxAmmo
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 882446caed2733540b1d56e9656e9b50, type: 3}
