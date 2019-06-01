@@ -38,7 +38,7 @@ public class PlayerController : PhysicsObject
     public Vector2 startPos;
     Vector2 move = Vector2.zero;
 
-    float deathFallTime = 0.1f;//1.5f;
+    float deathFallTime = 6.5f;//1.5f;
     bool deathFall = false;
     public float fallTime = 0;
 
@@ -103,7 +103,7 @@ public class PlayerController : PhysicsObject
     // instead of update
     protected override void ComputeVelocity()
     {
-        Debug.Log(state);
+        //Debug.Log(state);
         switch (state)
         {
             case PlayerState.normal:
@@ -185,15 +185,12 @@ public class PlayerController : PhysicsObject
 
         h_input = Input.GetAxis("Horizontal");
         doJump = Input.GetButton("Jump");
-        doKick = Input.GetButtonDown("Dash");
-        doShoot = Input.GetButtonDown("Fire1");
-
-        Debug.Log(h_input);
-        
-        //doDash = Input.GetButtonDown("Dash");
-        //doPlaceExplosive = Input.GetButtonDown("Fire1");
-        //doDetonate = Input.GetButtonDown("Fire2");
-        doSword = Input.GetButton("Fire2");
+        doKick = Input.GetButtonDown("Kick");
+        doShoot = Input.GetButtonDown("Shoot") && LevelManager.instance.ammo > 0;
+        doDash = Input.GetButtonDown("Dash");
+        doPlaceExplosive = Input.GetButtonDown("Explosive") && FindObjectOfType<Explosive>() == null && LevelManager.instance.bombs > 0;
+        doDetonate = Input.GetButtonDown("Explosive") && FindObjectOfType<Explosive>() != null;
+        doSword = Input.GetButton("Sword") && LevelManager.instance.sword > 0;
 
         if (h_input != 0)
             facing = Mathf.Sign(h_input);
@@ -234,6 +231,7 @@ public class PlayerController : PhysicsObject
 
         if(canInput && grounded && doPlaceExplosive)
         {
+            LevelManager.instance.bombs -= 1;
             Vector3 offset = new Vector3(0, -0.35f, 0);
             Instantiate(explosive, transform.position + offset, Quaternion.Euler(Vector3.zero));
         }
@@ -248,6 +246,7 @@ public class PlayerController : PhysicsObject
 
         if(canInput && doShoot)
         {
+            LevelManager.instance.ammo -= 1;
             if (grounded)
             {
                 state = PlayerState.shootGround;
@@ -324,9 +323,12 @@ public class PlayerController : PhysicsObject
         // falling to death
         if (!grounded)
         {
-            fallTime += Time.deltaTime * (Mathf.Abs(prevY - transform.position.y));
+            fallTime += (Mathf.Abs(prevY - transform.position.y));
+            //Debug.Log("FALLTIME: " + fallTime);
             if (fallTime > deathFallTime)
             {
+                if(!deathFall && SfxManager.instance != null)
+                    SfxManager.instance.DoScream();
                 deathFall = true;
                 anim.SetBool("fall", true);
 
@@ -352,10 +354,13 @@ public class PlayerController : PhysicsObject
                     //Debug.Log("Hit " + hit.transform.name);
                     if (hit.transform.tag == "Enemy" && fallTime > deathFallTime)
                     {
+                        if (SfxManager.instance != null)
+                            SfxManager.instance.PlaySFX(SfxManager.instance.fallDeath);
                         hit.transform.GetComponent<Enemy>().Die();
                         fallTime = 0;
                         deathFall = false;
                         anim.SetBool("fall", false);
+                        GameManager.instance.ReturnToNormalSpeed();
                     }
                 }
             }
@@ -366,6 +371,8 @@ public class PlayerController : PhysicsObject
             fallTime = 0;
             if (deathFall && !dead)
             {
+                if (SfxManager.instance != null)
+                    SfxManager.instance.PlaySFX(SfxManager.instance.fallDeath);
                 GameManager.instance.ReturnToNormalSpeed();
                 DieByFall();
                 anim.SetTrigger("death");
@@ -379,6 +386,10 @@ public class PlayerController : PhysicsObject
 
     void DieByFall()
     {
+        /*if (dead)
+            return;*/
+
+        FindObjectOfType<HUD>().deadText.SetActive(true);
         /*Instantiate(blood, transform.position + new Vector3(0, -0.75f, -0.1f), Quaternion.Euler(Random.Range(0, 360),
                                                                 Random.Range(0, 360),
                                                                 Random.Range(0, 360)));*/
@@ -391,8 +402,13 @@ public class PlayerController : PhysicsObject
 
     public void Die()
     {
+        /*if (dead)
+            return;*/
+        if (SfxManager.instance != null)
+            SfxManager.instance.DoScream();
         anim.SetTrigger("hit");
         state = PlayerState.death;
+        FindObjectOfType<HUD>().deadText.SetActive(true);
 
         Instantiate(blood, transform.position + new Vector3(0, -0.75f, -0.1f), Quaternion.Euler(Random.Range(0, 360),
                                                                 Random.Range(0, 360),
@@ -420,6 +436,8 @@ public class PlayerController : PhysicsObject
 
     void ShootGun()
     {
+        if (SfxManager.instance != null)
+            SfxManager.instance.PlaySFX(SfxManager.instance.gunshot, true);
         //instantiate effect
         Instantiate(soundBlast, transform.position + new Vector3(0.5f * facing, 0), Quaternion.Euler(0, 0, 0));
         // alert others
@@ -461,6 +479,9 @@ public class PlayerController : PhysicsObject
 
     void ShootGunAir()
     {
+        if (SfxManager.instance != null)
+            SfxManager.instance.PlaySFX(SfxManager.instance.gunshot, true);
+
         //instantiate effect
         Instantiate(soundBlast, transform.position + new Vector3(0.5f * facing, 0), Quaternion.Euler(0, 0, 0));
         // alert others
@@ -559,10 +580,13 @@ public class PlayerController : PhysicsObject
 
     void DoKick()
     {
+
         RaycastHit2D kickHit = Physics2D.Raycast(transform.position + new Vector3(0.5f * facing, 0), Vector2.right * facing, 0.1f);
 
         if (kickHit)
         {
+            if (SfxManager.instance != null)
+                SfxManager.instance.PlaySFX(SfxManager.instance.hit, true);
             Debug.Log("HIT SOMETHING");
             Debug.Log(kickHit.transform.name);
 
@@ -595,6 +619,7 @@ public class PlayerController : PhysicsObject
 
         move = Vector2.zero;
         velocity.y = -1;
+        GameManager.instance.speed = 1;
 
         if (canInput && doJump && canJump)
         {
@@ -681,6 +706,8 @@ public class PlayerController : PhysicsObject
 
     public void SwordHit()
     {
+        if (SfxManager.instance != null)
+            SfxManager.instance.PlaySFX(SfxManager.instance.sword, true);
         Debug.Log("SWORDHIT");
         RaycastHit2D swordHit = Physics2D.Raycast(transform.position + new Vector3(0.5f * facing, 0), Vector2.right * facing, 1);
         if (swordHit)

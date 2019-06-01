@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class LevelManager : MonoBehaviour
 {
@@ -18,6 +19,8 @@ public class LevelManager : MonoBehaviour
     public int sword;
     public int bombs;
     public int actions;
+
+    public string title = "";
 
     // Start is called before the first frame update
     void Start()
@@ -48,10 +51,19 @@ public class LevelManager : MonoBehaviour
         actions = maxActions;
 
         hasGoal = false;
+        FindObjectOfType<HUD>().deadText.SetActive(false);
     }
 
     public void EndLevel()
     {
         FindObjectOfType<SceneTransitions>().End();
+        Timer t = new Timer(1.5f, GoToNextLevel);
+        GameManager.instance.AddTimer(t, gameObject);
+    }
+
+    void GoToNextLevel()
+    {
+        int next = SceneManager.GetActiveScene().buildIndex + 1;
+        SceneManager.LoadScene(next);
     }
 }

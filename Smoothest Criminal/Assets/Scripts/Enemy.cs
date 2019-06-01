@@ -15,7 +15,7 @@ public class Enemy : PhysicsObject
     Vector3 startingPoint;
     bool startingStationary;
     int startingDir;
-    bool startingPatrol;
+    public bool startingPatrol;
     private Vector2 startingSize;
     private Vector2 startingBoxOffset;
     bool stunned = false;
@@ -99,11 +99,16 @@ public class Enemy : PhysicsObject
             Destroy(gameObject);
         }
 
+        fallTime = 0;
+        deathFall = false;
         state = EnemyState.normal;
         transform.position = startingPoint;
         stationary = startingStationary;
         facing = startingDir;
-        patrol = startingPatrol;
+        
+        suspicious = false;
+        suspiciousPoint = Vector2.zero;
+        pursue = false;
 
         GetComponent<BoxCollider2D>().size = startingSize;
         GetComponent<BoxCollider2D>().offset = startingBoxOffset;
@@ -115,6 +120,9 @@ public class Enemy : PhysicsObject
         anim.SetBool("fall", false);
         anim.SetBool("hang", false);
         anim.SetTrigger("restart");
+
+        hitDirection = Vector2.zero;
+        patrol = startingPatrol;
     }
 
     // Update is called once per frame
@@ -168,6 +176,7 @@ public class Enemy : PhysicsObject
         if (dead)
             return;
 
+        
         dead = true;
 
         GameManager.instance.FreezeFrame();
@@ -210,6 +219,8 @@ public class Enemy : PhysicsObject
         if (dead)
             return;
 
+        if (SfxManager.instance != null)
+            SfxManager.instance.DoScream();
         LevelManager.instance.hasGoal = target;
         move.x = 0;
         anim.SetTrigger("hit");
@@ -291,12 +302,23 @@ public class Enemy : PhysicsObject
             {
                 if(wallHit.transform.tag == "Ground")
                 {
-                    suspiciousPoint = wallHit.point;
+                    //suspiciousPoint = wallHit.point;
+                    elapsedNodeTime += Time.deltaTime * GameManager.instance.speed;
+
+                    if (elapsedNodeTime >= 3.0f)
+                    {
+                        // not suspicious anymore
+                        suspicious = false;
+                        suspiciousPoint = Vector2.zero;
+                        elapsedNodeTime = 0;
+                        returnToStart = true;
+                    }
                 }
             }
 
             if (Vector2.Distance(transform.position, suspiciousPoint) < nodeDistance)
             {
+                Debug.Log("Reached suspicious point");
                 move.x = 0;
                 anim.SetBool("running", false);
                 elapsedNodeTime += Time.deltaTime * GameManager.instance.speed;
@@ -387,9 +409,9 @@ public class Enemy : PhysicsObject
 
         
 
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < 3; i++)
         {
-            Vector3 offset = new Vector2(0, -0.6f + (i * 0.25f));
+            Vector3 offset = new Vector2(0, -0.2f + (i * 0.1f));
 
             RaycastHit2D hit = Physics2D.Raycast(transform.position + new Vector3(1.0f * facing, offset.y),
                                                  Vector2.right * facing,
@@ -426,6 +448,13 @@ public class Enemy : PhysicsObject
             fallTime += Time.deltaTime * GameManager.instance.speed;
             if (fallTime > deathFallTime)
             {
+                fallTime = 0;
+                //SfxManager.instance.PlaySFX(SfxManager.instance.scream);
+                if (SfxManager.instance != null)
+                    SfxManager.instance.DoScream();
+                /*int r = Random.Range(0, 4);
+                SfxManager.instance.PlaySFX(SfxManager.instance.screams[r], true);*/
+                Debug.Log("AAAAA");
                 deathFall = true;
                 anim.SetBool("fall", true);
 
@@ -443,6 +472,8 @@ public class Enemy : PhysicsObject
             if (deathFall && !dead)
             {
                 DieByFall();
+                if (SfxManager.instance != null)
+                    SfxManager.instance.PlaySFX(SfxManager.instance.fallDeath);
                 anim.SetTrigger("death");
             }
         }
@@ -467,6 +498,8 @@ public class Enemy : PhysicsObject
 
     public void SwordHit()
     {
+        if (SfxManager.instance != null)
+            SfxManager.instance.PlaySFX(SfxManager.instance.sword, true);
         RaycastHit2D swordHit = Physics2D.Raycast(transform.position + new Vector3(0.5f * facing, 0), Vector2.right * facing, 1);
         if (swordHit)
         {
@@ -484,6 +517,8 @@ public class Enemy : PhysicsObject
 
     void ShootGun()
     {
+        if (SfxManager.instance != null)
+            SfxManager.instance.PlaySFX(SfxManager.instance.gunshot, true);
         //instantiate effect
         Instantiate(soundBlast, transform.position + new Vector3(0.5f * facing, 0), Quaternion.Euler(0, 0, 0));
         // alert others
@@ -560,7 +595,7 @@ public class Enemy : PhysicsObject
             if (state != EnemyState.dead)
             {
                 Instantiate(bloodParticle, transform.position, Quaternion.Euler(0, 0, 0));
-                GameManager.instance.FreezeFrame();
+                //GameManager.instance.FreezeFrame();
                 Die();
             }
 

@@ -9,6 +9,8 @@ public class BloodSplatter : MonoBehaviour
     void Start()
     {
         GetComponent<SpriteRenderer>().sprite = splatters[Random.Range(0, splatters.Length - 1)];
+        if (SfxManager.instance != null)
+            SfxManager.instance.PlaySFX(SfxManager.instance.blood);
     }
 
     // Update is called once per frame

@@ -22,6 +22,8 @@ public class Explosive : MonoBehaviour
     public void Explode()
     {
         Instantiate(blast, transform.position, Quaternion.Euler(Vector3.zero));
+        if(SfxManager.instance != null)
+            SfxManager.instance.PlaySFX(SfxManager.instance.gunshot);
         // alert others
         foreach (Enemy e in FindObjectsOfType<Enemy>())
         {

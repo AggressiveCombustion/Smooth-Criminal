@@ -126,13 +126,13 @@ public class MainMenu : MonoBehaviour
             if(i == index)
             {
                 options[i].transform.localScale = new Vector3(1.5f, 1.5f, 1);
-                options[i].GetComponent<Text>().color = Color.white;
+                options[i].GetComponent<Text>().color = Color.red;
             }
 
             else
             {
                 options[i].transform.localScale = new Vector3(1, 1, 1);
-                options[i].GetComponent<Text>().color = new Color(0.8f, 0.8f, 0.8f);
+                options[i].GetComponent<Text>().color = Color.black;
             }
         }
 
@@ -258,7 +258,7 @@ public class MainMenu : MonoBehaviour
 
     void StartGame()
     {
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene(2);
     }
 
     void GoToCredits()

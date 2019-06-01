@@ -7,6 +7,16 @@ public class SfxManager : MonoBehaviour
     public static SfxManager instance;
     public AudioSource[] sources;
 
+    public AudioClip gunshot;
+    public AudioClip sword;
+    public AudioClip blood;
+    public AudioClip hit;
+    public AudioClip[] screams;
+    public AudioClip alarm;
+    public AudioClip footstep;
+    public AudioClip fallDeath;
+    public AudioClip scream;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -16,6 +26,7 @@ public class SfxManager : MonoBehaviour
             Destroy(gameObject);
 
         DontDestroyOnLoad(gameObject);
+        scream = screams[Random.Range(0, 4)];
 
     }
 
@@ -48,6 +59,9 @@ public class SfxManager : MonoBehaviour
 
     public void PlaySFX(AudioClip clip, bool interrupt, bool looping)
     {
+        if (instance == null)
+            return;
+
         AudioSource toUse = null;
         foreach (AudioSource sauce in sources)
         {
@@ -95,5 +109,15 @@ public class SfxManager : MonoBehaviour
             if (s.clip == clip)
                 s.Stop();
         }
+    }
+
+    public void DoScream()
+    {
+        if (instance == null)
+            return;
+
+        //int r = Random.Range(0, 4);
+        PlaySFX(scream, true, false);
+        scream = screams[Random.Range(0, 4)];
     }
 }

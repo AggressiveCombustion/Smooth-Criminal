@@ -28,5 +28,12 @@ public class SceneTransitions : MonoBehaviour
     public void End()
     {
         anim.SetTrigger("end");
+        DoSwoosh();
+    }
+
+    public void DoSwoosh()
+    {
+        if (SfxManager.instance != null)
+            SfxManager.instance.PlaySFX(swoosh);
     }
 }

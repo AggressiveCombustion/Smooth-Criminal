@@ -207,3 +207,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   anim: {fileID: 8432446182770480119}
+  swoosh: {fileID: 8300000, guid: fbab3ab76793efe4e8ff6c5e6935f18a, type: 3}
